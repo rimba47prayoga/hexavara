@@ -7,6 +7,15 @@ class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomerDetail
         fields = [
+            'id', 'name', 'phone', 'total_duration',
+            'total_outgoing', 'total_incoming'
+        ]
+
+
+class SimpleCustomerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomerDetail
+        fields = [
             'id', 'name', 'phone'
         ]
 
@@ -31,14 +40,14 @@ class CallRecordSerializer(serializers.ModelSerializer):
     def get_incoming(self, instance):
         if self.get_type_call(instance) == 'outgoing':
             user = CustomerDetail.objects.get(phone=instance.incoming_number)
-            serializer = CustomerSerializer(instance=user)
+            serializer = SimpleCustomerSerializer(instance=user)
             return serializer.data
         return None
 
     def get_outgoing(self, instance):
         if self.get_type_call(instance) == 'incoming':
             user = CustomerDetail.objects.get(phone=instance.outgoing_number)
-            serializer = CustomerSerializer(instance=user)
+            serializer = SimpleCustomerSerializer(instance=user)
             return serializer.data
         return None
 

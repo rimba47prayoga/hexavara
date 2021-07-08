@@ -6,6 +6,8 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
+from django.db.models import Q
+from django.db.models.aggregates import Sum
 
 
 class CallRecord(models.Model):
@@ -32,6 +34,36 @@ class CustomerDetail(models.Model):
     class Meta:
         managed = False
         db_table = 'customer_detail'
+
+    @property
+    def total_duration(self):
+        call_records = CallRecord.objects.filter(
+            Q(incoming_number=self.phone) |
+            Q(outgoing_number=self.phone)
+        )
+        return {
+            "sum": (call_records.aggregate(total_duration=Sum('duration'))
+                    .get('total_duration')),
+            "count": call_records.count()
+        }
+
+    @property
+    def total_outgoing(self):
+        call_records = CallRecord.objects.filter(outgoing_number=self.phone)
+        return {
+            "sum": (call_records.aggregate(total_duration=Sum('duration'))
+                    .get('total_duration')),
+            "count": call_records.count()
+        }
+
+    @property
+    def total_incoming(self):
+        call_records = CallRecord.objects.filter(incoming_number=self.phone)
+        return {
+            "sum": (call_records.aggregate(total_duration=Sum('duration'))
+                    .get('total_duration')),
+            "count": call_records.count()
+        }
 
 
 class SubscriptionPlan(models.Model):

@@ -1,7 +1,7 @@
 from django.db import connection
 from django.db.models import Q
 from rest_framework.decorators import action, api_view
-from rest_framework.mixins import ListModelMixin
+from rest_framework.mixins import ListModelMixin, RetrieveModelMixin
 from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import GenericViewSet
 
@@ -61,6 +61,7 @@ def customer_total_costs(request):
 
 
 class CustomerViewSet(ListModelMixin,
+                      RetrieveModelMixin,
                       GenericViewSet):
     queryset = CustomerDetail.objects.all().order_by('name')
     serializer_class = CustomerSerializer

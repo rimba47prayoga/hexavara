@@ -91,9 +91,9 @@ WSGI_APPLICATION = 'hexavara.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'hexavara',
-        'USER': 'rimba',
-        'PASSWORD': 'qweqweqwe'
+        'NAME': 'hexavara_questions_phonebilling',
+        'USER': 'root',
+        'PASSWORD': ''
     }
 }
 
